@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<title>Don't Kill Santa</title>
+	<meta name="description" content="A runner of short proportions, with large consequences.">
+
+	<!-- Facebook Meta Tags -->
+	<meta property="og:url" content="https://duffn.itch.io/dont-kill-santa">
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="Don't Kill Santa by duffn">
+	<meta property="og:description" content="A runner of short proportions, with large consequences.">
+	<meta property="og:image" content="https://img.itch.zone/aW1nLzE4OTI1ODE1LnBuZw==/original/Fiid66.png">
+
+	<!-- Twitter Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta property="twitter:domain" content="duffn.itch.io">
+	<meta property="twitter:url" content="https://duffn.itch.io/dont-kill-santa">
+	<meta name="twitter:title" content="Don't Kill Santa by duffn">
+	<meta name="twitter:description" content="A runner of short proportions, with large consequences.">
+	<meta name="twitter:image" content="https://img.itch.zone/aW1nLzE4OTI1ODE1LnBuZw==/original/Fiid66.png">
+
+	<!-- Meta Tags Generated via https://www.opengraph.xyz -->
+	<meta name="viewport" content="width=device-width">
+	<meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+	<meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
+	<style>
+		body {
+			margin: 0px;
+			text-align: center;
+		}
+
+		canvas.emscripten {
+			border: 0px none;
+			background-color: black;
+		}
+	</style>
+	<!-- <script type='text/javascript' src="https://cdn.jsdelivr.net/gh/eligrey/FileSaver.js/dist/FileSaver.min.js"> </script> -->
+	<script type='text/javascript' src="https://cdn.jsdelivr.net/gh/eligrey/FileSaver.js/dist/FileSaver.min.js"
+		crossOriginIsolated="true" crossorigin="anonymous"></script>
+	<script type='text/javascript'>
+		function saveFileFromMEMFSToDisk(memoryFSname, localFSname)     // This can be called by C/C++ code
+		{
+			var isSafari = false; // Not supported, navigator.userAgent access is being restricted
+			//var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+			var data = FS.readFile(memoryFSname);
+			var blob;
+
+			if (isSafari) blob = new Blob([data.buffer], {type: "application/octet-stream"});
+			else blob = new Blob([data.buffer], {type: "application/octet-binary"});
+
+			// NOTE: SaveAsDialog is a browser setting. For example, in Google Chrome,
+			// in Settings/Advanced/Downloads section you have a setting:
+			// 'Ask where to save each file before downloading' - which you can set true/false.
+			// If you enable this setting it would always ask you and bring the SaveAsDialog
+			saveAs(blob, localFSname);
+		}
+	</script>
+</head>
+
+<body>
+	<canvas class=emscripten id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas>
+	<p id="output" />
+	<script>
+		var Module = {
+			print: (function () {
+				var element = document.getElementById('output');
+				if (element) element.value = ''; // clear browser cache
+				return function (text) {
+					if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+					console.log(text);
+					if (element) {
+						element.value += text + "\n";
+						element.scrollTop = element.scrollHeight; // focus on bottom
+					}
+				};
+			})(),
+			canvas: (function () {
+				var canvas = document.getElementById('canvas');
+				return canvas;
+			})()
+		};
+	</script>
+	{{{ SCRIPT }}}
+</body>
+
+</html>
