@@ -2,9 +2,30 @@
 
 This is a game written in C using [raylib](https://github.com/raysan5/raylib), for the for the [12 Seconds of Christmas](https://itch.io/jam/12-seconds-of-christmas-game-jam-2024) game jam.
 
+![Don't Kill Santa](screenshots/dont-kill-santa.png)
+
 ## Playing the game
 
 [https://duffn.itch.io/dont-kill-santa](https://duffn.itch.io/dont-kill-santa)
+
+## Building
+
+- Build locally
+
+```
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release .. # or cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake --build .
+./dontkillsanta
+```
+
+- Build for the web
+
+```
+cd tools
+./build_for_web.sh
+```
 
 ## Attributions
 
