@@ -178,11 +178,9 @@ static void UpdateDrawFrame(void) {
             UpdateTitleScreen();
 
             if (FinishTitleScreen() == GAMEPLAY) {
-                StopMusicStream(music);
                 TransitionToScreen(GAMEPLAY);
             }
             if (FinishTitleScreen() == INSTRUCTIONS) {
-                StopMusicStream(music);
                 ChangeToScreen(INSTRUCTIONS);
             }
         } break;
