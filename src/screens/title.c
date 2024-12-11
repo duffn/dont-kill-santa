@@ -69,8 +69,6 @@ void InitTitleScreen(void) {
     framesCounter = 0;
     vsAlpha = 0.0f;
     vsScale = 10.0f;
-
-    PlayMusicStream(music);
 }
 
 // Title Screen Update logic
