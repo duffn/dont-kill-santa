@@ -1,3 +1,4 @@
+#include "config.h"
 #include "raylib.h"
 #include "screens.h"
 #include <stdio.h>
@@ -7,6 +8,10 @@ static Font font = {0};
 static Font instructionsFont = {0};
 static Vector2 mousePosition = {0.0f, 0.0f};
 static const Color backgroundColor = (Color){47, 79, 146, 255};
+static Texture2D background = {0};
+
+static Texture2D santaWalk = {0};
+static Rectangle santaFrame = {0};
 
 static Vector2 textPosition = {0};
 static const char *text = "Instructions";
@@ -15,12 +20,14 @@ static const int titleFontSize = 72;
 static char *playText = "Play";
 static Vector2 playTextPosition = {0};
 static Vector2 playTextSize = {0};
-static const int supplementalFontSize = 36;
+static const int supplementalFontSize = 48;
 
 // Instructions Screen Initialization logic
 void InitInstructionsScreen(void) {
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 
+    santaWalk = LoadTexture("assets/sprites/santa-walk.png");
+    background = LoadTexture("assets/backgrounds/background.png");
     font = LoadFontEx("assets/fonts/hello-santa.ttf", 96, 0, 0);
     instructionsFont = LoadFontEx("assets/fonts/coolvetica.ttf", 96, 0, 0);
 
@@ -33,7 +40,14 @@ void InitInstructionsScreen(void) {
         MeasureTextEx(GetFontDefault(), playText, supplementalFontSize, 1);
     playTextPosition =
         (Vector2){(GetScreenWidth() - playTextSize.x) / 2.0f,
-                  (GetScreenHeight() - playTextSize.y) / 2.0f + 150};
+                  (GetScreenHeight() - playTextSize.y) / 2.0f + 175};
+
+    santaFrame = (Rectangle){.x = 0.0f,
+                             .y = 0.0f,
+                             .width = (float)santaWalk.width / NUM_FRAMES_WALK,
+                             .height = (float)santaWalk.height};
+    santaFrame.x = 4 * santaFrame.width;
+
     finishScreen = -1;
 }
 
@@ -54,11 +68,15 @@ void UpdateInstructionsScreen(void) {
 
 // Instructions Screen Draw logic
 void DrawInstructionsScreen(void) {
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), backgroundColor);
-    DrawTextEx(font, text, textPosition, titleFontSize, 1,
-               (Color){255, 255, 255, 255});
     const int fontSize = 24;
-    const int startPositionY = 200;
+    const int startPositionY = 153;
+
+    ClearBackground(RAYWHITE);
+    DrawTextureEx(background, (Vector2){0.0f, 0.0f}, 0.0f, 1.0f, WHITE);
+
+    DrawRectangle(0, startPositionY - 25, GetScreenWidth(), 200,
+                  backgroundColor);
+    DrawTextEx(font, text, textPosition, titleFontSize, 1, WHITE);
     // Draw actual instructions
     DrawTextEx(instructionsFont,
                "Hold down H or O or hold down on a touchscreen to make Santa "
@@ -79,12 +97,17 @@ void DrawInstructionsScreen(void) {
                (Vector2){10, startPositionY + 120}, fontSize, 1, WHITE);
     DrawTextEx(instructionsFont, playText, playTextPosition,
                supplementalFontSize, 1, WHITE);
+    DrawTexturePro(santaWalk, santaFrame,
+                   (Rectangle){0.0f, GetScreenHeight() - santaFrame.height - 10,
+                               santaFrame.width, santaFrame.height},
+                   (Vector2){0.0f, 0.0f}, 0.0f, WHITE);
 }
 
 // Instructions Screen Unload logic
 void UnloadInstructionsScreen(void) {
     UnloadFont(font);
     UnloadFont(instructionsFont);
+    UnloadTexture(background);
 }
 
 // Instructions Screen should finish?
