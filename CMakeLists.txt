@@ -109,29 +109,27 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
 
 if(NOT ${PLATFORM} STREQUAL "Web")
     if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -pthread")
-        target_link_libraries(${LIBRARIES} -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic)
-        # dont forget to set  "cmake.configureSettings": { "CMAKE_BUILD_TYPE": "${buildType}" } in settings.json for vs code
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -pthread")
+        target_link_libraries(${LIBRARIES} -static-libgcc -Wl,-Bstatic -lpthread -Wl,-Bdynamic)
         if (CMAKE_BUILD_TYPE STREQUAL "Debug")
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-rtti")
         endif()
     elseif (CMAKE_C_COMPILER_ID STREQUAL "GNU")
-        target_link_libraries(${LIBRARIES} -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic)
+        target_link_libraries(${LIBRARIES} -static-libgcc -Wl,-Bstatic -lpthread -Wl,-Bdynamic)
     elseif (CMAKE_C_COMPILER_ID STREQUAL "Intel")
-        target_link_libraries(${LIBRARIES} -static-intel -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic)
+        target_link_libraries(${LIBRARIES} -static-intel -Wl,-Bstatic -lpthread -Wl,-Bdynamic)
     elseif (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
         target_link_libraries(${LIBRARIES})
 
         if(OFF)
-            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")  
+            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
         endif()
 
-        # dont forget to set  "cmake.configureSettings": { "CMAKE_BUILD_TYPE": "${buildType}" } in settings.json for vs code
         if (CMAKE_BUILD_TYPE STREQUAL "Debug")
             message("-- console enabled")
             set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
         else()
-            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")  
+            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
         endif()
     else()
         target_link_libraries(${LIBRARIES})
@@ -139,7 +137,6 @@ if(NOT ${PLATFORM} STREQUAL "Web")
 else()
     target_link_libraries(${LIBRARIES})
 endif()
-
 
 ##########################################################################################
 # Build flags and additional settings
@@ -153,7 +150,7 @@ if(NOT USE_NO_ASSETS)
         ${CMAKE_CURRENT_BINARY_DIR}/assets
         COMMENT "Copying assets to build directory"
     )
-    add_dependencies(${PROJECT_NAME} copyAssetsOver) 
+    add_dependencies(${PROJECT_NAME} copyAssetsOver)
 endif()
 
 add_definitions(-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
@@ -205,7 +202,7 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug")
     message("-- console enabled")
     if(NOT USE_NO_ASSETS AND NOT ${PLATFORM} STREQUAL "Web")
         # Set the asset path macro to the absolute path on the dev machine
-        target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/")   
+        target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/")
     endif()
 else()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
