@@ -61,9 +61,12 @@ void DrawInstructionsScreen(void) {
     const int startPositionY = 200;
     // Draw actual instructions
     DrawTextEx(instructionsFont,
-               "Hold down H or O to make Santa run. HO, HO, HO!",
+               "Hold down H or O or hold down on a touchscreen to make Santa "
+               "run. HO, HO, HO!",
                (Vector2){10, startPositionY}, fontSize, 1, WHITE);
-    DrawTextEx(instructionsFont, "Release the key to stop him.",
+    DrawTextEx(instructionsFont,
+               "Release the key or remove your finger from the touchscreen to "
+               "stop him.",
                (Vector2){10, startPositionY + 40}, fontSize, 1, WHITE);
     DrawTextEx(
         instructionsFont,

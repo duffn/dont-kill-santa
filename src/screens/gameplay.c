@@ -113,7 +113,9 @@ void UpdateGameplayScreen(void) {
     }
 
     // If not dead, handle input for speed
-    if (!isDead && !gameEnded && (IsKeyDown(KEY_H) || IsKeyDown(KEY_O))) {
+    if (!isDead && !gameEnded &&
+        (IsKeyDown(KEY_H) || IsKeyDown(KEY_O) ||
+         IsGestureDetected(GESTURE_HOLD) || IsGestureDetected(GESTURE_DRAG))) {
         if (framesSpeed < MAX_FRAME_SPEED)
             framesSpeed++;
     } else if (!isAnimatingDeath) {
