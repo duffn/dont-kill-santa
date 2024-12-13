@@ -170,12 +170,14 @@ static void change_to_screen(GameScreen screen) {
 }
 
 static void update_draw_frame(void) {
+    float dt = GetFrameTime();
+
     UpdateMusicStream(music);
 
     if (!on_transition) {
         switch (current_screen) {
         case TITLE: {
-            update_title_screen();
+            update_title_screen(dt);
 
             if (finish_title_screen() == GAMEPLAY) {
                 transition_to_screen(GAMEPLAY);
@@ -185,7 +187,7 @@ static void update_draw_frame(void) {
             }
         } break;
         case GAMEPLAY: {
-            update_gameplay_screen();
+            update_gameplay_screen(dt);
 
             if (finish_gameplay_screen() == TITLE)
                 transition_to_screen(TITLE);
@@ -193,7 +195,7 @@ static void update_draw_frame(void) {
                 transition_to_screen(GAMEPLAY);
         } break;
         case INSTRUCTIONS: {
-            update_instructions_screen();
+            update_instructions_screen(dt);
 
             if (finish_instructions_screen() == GAMEPLAY)
                 transition_to_screen(GAMEPLAY);

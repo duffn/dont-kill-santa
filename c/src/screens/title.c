@@ -72,7 +72,7 @@ void init_title_screen(void) {
     vs_scale = 10.0f;
 }
 
-void update_title_screen(void) {
+void update_title_screen(float dt) {
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 
     mouse_position = GetMousePosition();

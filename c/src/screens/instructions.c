@@ -51,7 +51,7 @@ void init_instructions_screen(void) {
     finish_screen = NONE;
 }
 
-void update_instructions_screen(void) {
+void update_instructions_screen(float dt) {
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
     mouse_position = GetMousePosition();
 
