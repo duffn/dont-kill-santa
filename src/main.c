@@ -20,6 +20,12 @@ static void DrawTransition(void);
 static void UpdateDrawFrame(void);
 
 int main(void) {
+#ifdef DEBUG
+    SetTraceLogLevel(LOG_DEBUG);
+#else
+    SetTraceLogLevel(LOG_ERROR);
+#endif
+
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Don't kill Santa");
 
     currentScreen = TITLE;
