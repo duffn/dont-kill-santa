@@ -3,112 +3,110 @@
 #include "screens.h"
 #include <stdio.h>
 
-static GameScreen finishScreen = -1;
+static GameScreen finish_screen = NONE;
 static Font font = {0};
-static Font instructionsFont = {0};
-static Vector2 mousePosition = {0.0f, 0.0f};
-static const Color backgroundColor = (Color){47, 79, 146, 255};
+static Font instructions_font = {0};
+static Vector2 mouse_position = {0.0f, 0.0f};
+static const Color background_color = (Color){47, 79, 146, 255};
 static Texture2D background = {0};
 
-static Texture2D santaWalk = {0};
-static Rectangle santaFrame = {0};
+static Texture2D santa_walk = {0};
+static Rectangle santa_frame = {0};
 
-static Vector2 textPosition = {0};
+static Vector2 text_position = {0};
 static const char *text = "Instructions";
-static const int titleFontSize = 72;
+static const int title_font_size = 72;
 
-static char *playText = "Play";
-static Vector2 playTextPosition = {0};
-static Vector2 playTextSize = {0};
-static const int supplementalFontSize = 48;
+static char *play_text = "Play";
+static Vector2 play_text_position = {0};
+static Vector2 play_text_size = {0};
+static const int supplemental_font_size = 48;
 
-// Instructions Screen Initialization logic
-void InitInstructionsScreen(void) {
+void init_instructions_screen(void) {
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 
-    santaWalk = LoadTexture("assets/sprites/santa-walk.png");
+    santa_walk = LoadTexture("assets/sprites/santa-walk.png");
     background = LoadTexture("assets/backgrounds/background.png");
     font = LoadFontEx("assets/fonts/hello-santa.ttf", 96, 0, 0);
-    instructionsFont = LoadFontEx("assets/fonts/coolvetica.ttf", 96, 0, 0);
+    instructions_font = LoadFontEx("assets/fonts/coolvetica.ttf", 96, 0, 0);
 
     GenTextureMipmaps(&font.texture);
     SetTextureFilter(font.texture, TEXTURE_FILTER_POINT);
-    const Vector2 textSize = MeasureTextEx(font, text, titleFontSize, 1);
-    textPosition = (Vector2){(GetScreenWidth() - textSize.x) / 2.0f, 10.0f};
+    const Vector2 text_size = MeasureTextEx(font, text, title_font_size, 1);
+    text_position = (Vector2){(GetScreenWidth() - text_size.x) / 2.0f, 10.0f};
 
-    playTextSize =
-        MeasureTextEx(GetFontDefault(), playText, supplementalFontSize, 1);
-    playTextPosition =
-        (Vector2){(GetScreenWidth() - playTextSize.x) / 2.0f,
-                  (GetScreenHeight() - playTextSize.y) / 2.0f + 175};
+    play_text_size =
+        MeasureTextEx(GetFontDefault(), play_text, supplemental_font_size, 1);
+    play_text_position =
+        (Vector2){(GetScreenWidth() - play_text_size.x) / 2.0f,
+                  (GetScreenHeight() - play_text_size.y) / 2.0f + 175};
 
-    santaFrame = (Rectangle){.x = 0.0f,
-                             .y = 0.0f,
-                             .width = (float)santaWalk.width / NUM_FRAMES_WALK,
-                             .height = (float)santaWalk.height};
-    santaFrame.x = 4 * santaFrame.width;
+    santa_frame =
+        (Rectangle){.x = 0.0f,
+                    .y = 0.0f,
+                    .width = (float)santa_walk.width / NUM_FRAMES_WALK,
+                    .height = (float)santa_walk.height};
+    santa_frame.x = 4 * santa_frame.width;
 
-    finishScreen = -1;
+    finish_screen = NONE;
 }
 
-// Instructions Screen Update logic
-void UpdateInstructionsScreen(void) {
+void update_instructions_screen(void) {
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
-    mousePosition = GetMousePosition();
+    mouse_position = GetMousePosition();
 
-    if (CheckCollisionPointRec(
-            mousePosition, (Rectangle){playTextPosition.x, playTextPosition.y,
-                                       playTextSize.x, playTextSize.y})) {
+    if (CheckCollisionPointRec(mouse_position, (Rectangle){play_text_position.x,
+                                                           play_text_position.y,
+                                                           play_text_size.x,
+                                                           play_text_size.y})) {
         SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            finishScreen = GAMEPLAY;
+            finish_screen = GAMEPLAY;
         }
     }
 }
 
-// Instructions Screen Draw logic
-void DrawInstructionsScreen(void) {
-    const int fontSize = 24;
-    const int startPositionY = 153;
+void draw_instructions_screen(void) {
+    const int font_size = 24;
+    const int start_position_y = 153;
 
     ClearBackground(RAYWHITE);
     DrawTextureEx(background, (Vector2){0.0f, 0.0f}, 0.0f, 1.0f, WHITE);
 
-    DrawRectangle(0, startPositionY - 25, GetScreenWidth(), 200,
-                  backgroundColor);
-    DrawTextEx(font, text, textPosition, titleFontSize, 1, WHITE);
-    // Draw actual instructions
-    DrawTextEx(instructionsFont,
-               "Hold down H or O or hold down on a touchscreen to make Santa "
+    DrawRectangle(0, start_position_y - 25, GetScreenWidth(), 200,
+                  background_color);
+    DrawTextEx(font, text, text_position, title_font_size, 1, WHITE);
+    // draw actual instructions
+    DrawTextEx(instructions_font,
+               "Hold down H or O or hold down on a touchscreen to make santa "
                "run. HO, HO, HO!",
-               (Vector2){10, startPositionY}, fontSize, 1, WHITE);
-    DrawTextEx(instructionsFont,
+               (Vector2){10, start_position_y}, font_size, 1, WHITE);
+    DrawTextEx(instructions_font,
                "Release the key or remove your finger from the touchscreen to "
                "stop him.",
-               (Vector2){10, startPositionY + 40}, fontSize, 1, WHITE);
+               (Vector2){10, start_position_y + 40}, font_size, 1, WHITE);
     DrawTextEx(
-        instructionsFont,
+        instructions_font,
         "Stop as close as possible to the candy cane, but don't touch it "
         "or you know what happens!",
-        (Vector2){10, startPositionY + 80}, fontSize, 1, WHITE);
-    DrawTextEx(instructionsFont,
+        (Vector2){10, start_position_y + 80}, font_size, 1, WHITE);
+    DrawTextEx(instructions_font,
                "The closer you get to the candy cane, the better, so try for "
                "your lowest score!",
-               (Vector2){10, startPositionY + 120}, fontSize, 1, WHITE);
-    DrawTextEx(instructionsFont, playText, playTextPosition,
-               supplementalFontSize, 1, WHITE);
-    DrawTexturePro(santaWalk, santaFrame,
-                   (Rectangle){0.0f, GetScreenHeight() - santaFrame.height - 10,
-                               santaFrame.width, santaFrame.height},
+               (Vector2){10, start_position_y + 120}, font_size, 1, WHITE);
+    DrawTextEx(instructions_font, play_text, play_text_position,
+               supplemental_font_size, 1, WHITE);
+    DrawTexturePro(santa_walk, santa_frame,
+                   (Rectangle){0.0f,
+                               GetScreenHeight() - santa_frame.height - 10,
+                               santa_frame.width, santa_frame.height},
                    (Vector2){0.0f, 0.0f}, 0.0f, WHITE);
 }
 
-// Instructions Screen Unload logic
-void UnloadInstructionsScreen(void) {
+void unload_instructions_screen(void) {
     UnloadFont(font);
-    UnloadFont(instructionsFont);
+    UnloadFont(instructions_font);
     UnloadTexture(background);
 }
 
-// Instructions Screen should finish?
-GameScreen FinishInstructionsScreen(void) { return finishScreen; }
+GameScreen finish_instructions_screen(void) { return finish_screen; }
