@@ -18,5 +18,5 @@ cmake --build .
 
 ```
 cd tools
-./build_for_web.sh asyncify
+./build_for_web.sh async
 ```

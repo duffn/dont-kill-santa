@@ -12,7 +12,7 @@ static bool is_dead = false;
 static bool is_animating_death = false;
 
 static GameScreen finish_screen = NONE;
-static int frames_speed = 0;
+static float frames_speed = 0.0f;
 
 static int frames_counter = 0;
 static int current_frame = 0;
@@ -69,7 +69,7 @@ void init_gameplay_screen(void) {
     final_distance = 0.0f;
 
     // Randomly generate candy cane position off-screen
-    const int candy_cane_position_off_screen = GetRandomValue(500, 2500);
+    const int candy_cane_position_off_screen = GetRandomValue(100, 5000);
 
     // Calculate ground position
     ground_y = GetScreenHeight() - ground.height;
@@ -104,9 +104,9 @@ void init_gameplay_screen(void) {
                   (GetScreenHeight() - quit_text_size.y) / 2.0f + 150};
 }
 
-void update_gameplay_screen(void) {
-    if (!is_dead && frames_speed > 0) {
-        scrolling_back -= frames_speed * 0.75f;
+void update_gameplay_screen(float dt) {
+    if (!is_dead && frames_speed > 0.0f) {
+        scrolling_back -= frames_speed * dt * FRAME_MULTIPLIER;
     }
 
     // If the background has fully scrolled off to the left, reset the offset
@@ -114,29 +114,33 @@ void update_gameplay_screen(void) {
         scrolling_back = 0;
     }
 
-    // If not dead, handle input for speed
     if (!is_dead && !game_ended &&
         (IsKeyDown(KEY_H) || IsKeyDown(KEY_O) ||
          IsGestureDetected(GESTURE_HOLD) || IsGestureDetected(GESTURE_DRAG))) {
-        if (frames_speed < MAX_FRAME_SPEED)
-            frames_speed++;
+        // Increase speed smoothly
+        frames_speed += FRAME_ACCELERATION * dt;
+        if (frames_speed > MAX_FRAME_SPEED)
+            frames_speed = (float)MAX_FRAME_SPEED;
     } else if (!is_animating_death) {
-        if (frames_speed > 0)
-            frames_speed--;
+        // If no keys are pressed, gradually decelerate
+        frames_speed -= FRAME_DECELERATION * dt;
+        if (frames_speed < 0.0f)
+            frames_speed = 0.0f;
     }
 
     // Check if game started
-    if (!game_started && frames_speed > 0) {
+    if (!game_started && frames_speed > 0.0f) {
         game_started = true;
     }
 
-    // Update animations if Santa moves or if we're animating death
-    if (frames_speed > 0 || is_animating_death) {
-        frames_counter++;
+    // Update animations if Santa moves or is animating death
+    if (frames_speed > 0.0f || is_animating_death) {
+        frames_counter += TARGET_FPS * dt * 3.0f;
 
-        if (frames_counter >= (TARGET_FPS / frames_speed) ||
-            is_animating_death) {
-            frames_counter = 0;
+        float frameDuration =
+            (TARGET_FPS / (frames_speed > 0.0f ? frames_speed : 1.0f));
+        if (frames_counter >= frameDuration || is_animating_death) {
+            frames_counter = 0.0f;
             current_frame++;
 
             if (is_dead) {
@@ -162,7 +166,7 @@ void update_gameplay_screen(void) {
 
         // Move the candy cane if Sant is not dead
         if (!is_dead) {
-            candy_cane_position.x -= frames_speed * 0.5f;
+            candy_cane_position.x -= frames_speed * dt * FRAME_MULTIPLIER;
         }
     }
 

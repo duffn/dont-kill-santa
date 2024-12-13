@@ -12,6 +12,9 @@
 // Frame speeds
 #define MAX_FRAME_SPEED 45
 #define MIN_FRAME_SPEED 1
+#define FRAME_MULTIPLIER 40.0f
+#define FRAME_ACCELERATION 200.0f
+#define FRAME_DECELERATION 100.0f
 
 // Target FPS
 #define TARGET_FPS 60
