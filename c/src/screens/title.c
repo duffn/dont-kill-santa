@@ -3,120 +3,124 @@
 #include "screens.h"
 #include <stdio.h>
 
-static int framesCounter = 0;
-static GameScreen finishScreen = -1;
-static float vsAlpha = 0.0f;
-static float vsScale = 0.0f;
+static int frames_counter = 0;
+static GameScreen finish_screen = -1;
+static float vs_alpha = 0.0f;
+static float vs_scale = 0.0f;
 
-static Vector2 mousePosition = {0.0f, 0.0f};
-static char *instructionsText = "Instructions";
-static Vector2 instructionsTextPosition = {0};
-static Vector2 instructionsTextSize = {0};
+static Vector2 mouse_position = {0.0f, 0.0f};
+static char *instructions_text = "instructions";
+static Vector2 instructions_text_position = {0};
+static Vector2 instructions_text_size = {0};
 
-static const int supplementalFontSize = 36;
+static const int supplemental_font_size = 36;
 
-static char *startText = "Start";
-static Vector2 startTextPosition = {0};
-static Vector2 startTextSize = {0};
+static char *start_text = "start";
+static Vector2 start_text_position = {0};
+static Vector2 start_text_size = {0};
 
 static Font font = {0};
-static Font menuFont = {0};
-static Vector2 textSize = {0};
-static Vector2 textPosition = {0};
-static const char *text = "Don't Kill Santa";
-static const int fontSize = 96;
-static const Color backgroundColor = (Color){47, 79, 146, 255};
+static Font menu_font = {0};
+static Vector2 text_size = {0};
+static Vector2 text_position = {0};
+static const char *text = "don't kill santa";
+static const int font_size = 96;
+static const Color background_color = (Color){47, 79, 146, 255};
 
-static Texture2D santaDead = {0};
-static Rectangle santaFrame = {0};
+static Texture2D santa_dead = {0};
+static Rectangle santa_frame = {0};
 
-// Title Screen Initialization logic
-void InitTitleScreen(void) {
+// title screen initialization logic
+void init_title_screen(void) {
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 
     font = LoadFontEx("assets/fonts/hello-santa.ttf", 96, 0, 0);
-    menuFont = LoadFontEx("assets/fonts/coolvetica.ttf", 96, 0, 0);
-    santaDead = LoadTexture("assets/sprites/santa-dead.png");
+    menu_font = LoadFontEx("assets/fonts/coolvetica.ttf", 96, 0, 0);
+    santa_dead = LoadTexture("assets/sprites/santa-dead.png");
 
     GenTextureMipmaps(&font.texture);
     SetTextureFilter(font.texture, TEXTURE_FILTER_POINT);
 
-    GenTextureMipmaps(&menuFont.texture);
-    SetTextureFilter(menuFont.texture, TEXTURE_FILTER_POINT);
-    textSize = MeasureTextEx(font, text, fontSize, 1);
-    textPosition = (Vector2){(GetScreenWidth() - textSize.x) / 2.0f,
-                             (GetScreenHeight() - textSize.y) / 2.0f - 150};
+    GenTextureMipmaps(&menu_font.texture);
+    SetTextureFilter(menu_font.texture, TEXTURE_FILTER_POINT);
+    text_size = MeasureTextEx(font, text, font_size, 1);
+    text_position = (Vector2){(GetScreenWidth() - text_size.x) / 2.0f,
+                              (GetScreenHeight() - text_size.y) / 2.0f - 150};
 
-    startTextSize = MeasureTextEx(menuFont, startText, supplementalFontSize, 1);
-    startTextPosition =
-        (Vector2){(GetScreenWidth() - startTextSize.x) / 2.0f,
-                  (GetScreenHeight() - startTextSize.y) / 2.0f + 150};
+    start_text_size =
+        MeasureTextEx(menu_font, start_text, supplemental_font_size, 1);
+    start_text_position =
+        (Vector2){(GetScreenWidth() - start_text_size.x) / 2.0f,
+                  (GetScreenHeight() - start_text_size.y) / 2.0f + 150};
 
-    instructionsTextSize =
-        MeasureTextEx(menuFont, instructionsText, supplementalFontSize, 1);
-    instructionsTextPosition =
-        (Vector2){(GetScreenWidth() - instructionsTextSize.x) / 2.0f,
-                  (GetScreenHeight() - instructionsTextSize.y) / 2.0f + 200};
+    instructions_text_size =
+        MeasureTextEx(menu_font, instructions_text, supplemental_font_size, 1);
+    instructions_text_position =
+        (Vector2){(GetScreenWidth() - instructions_text_size.x) / 2.0f,
+                  (GetScreenHeight() - instructions_text_size.y) / 2.0f + 200};
 
-    finishScreen = -1;
+    finish_screen = -1;
 
-    santaFrame = (Rectangle){.x = 0.0f,
-                             .y = 0.0f,
-                             .width = (float)santaDead.width / NUM_FRAMES_DEAD,
-                             .height = (float)santaDead.height};
-    santaFrame.x = 16 * santaFrame.width;
+    santa_frame =
+        (Rectangle){.x = 0.0f,
+                    .y = 0.0f,
+                    .width = (float)santa_dead.width / NUM_FRAMES_DEAD,
+                    .height = (float)santa_dead.height};
+    santa_frame.x = 16 * santa_frame.width;
 
-    framesCounter = 0;
-    vsAlpha = 0.0f;
-    vsScale = 10.0f;
+    frames_counter = 0;
+    vs_alpha = 0.0f;
+    vs_scale = 10.0f;
 }
 
-// Title Screen Update logic
-void UpdateTitleScreen(void) {
+// title screen update logic
+void update_title_screen(void) {
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 
-    mousePosition = GetMousePosition();
+    mouse_position = GetMousePosition();
 
-    if (CheckCollisionPointRec(
-            mousePosition,
-            (Rectangle){instructionsTextPosition.x, instructionsTextPosition.y,
-                        instructionsTextSize.x, instructionsTextSize.y})) {
+    if (CheckCollisionPointRec(mouse_position,
+                               (Rectangle){instructions_text_position.x,
+                                           instructions_text_position.y,
+                                           instructions_text_size.x,
+                                           instructions_text_size.y})) {
         SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            finishScreen = INSTRUCTIONS;
+            finish_screen = INSTRUCTIONS;
         }
     }
 
     if (CheckCollisionPointRec(
-            mousePosition, (Rectangle){startTextPosition.x, startTextPosition.y,
-                                       startTextSize.x, startTextSize.y})) {
+            mouse_position,
+            (Rectangle){start_text_position.x, start_text_position.y,
+                        start_text_size.x, start_text_size.y})) {
         SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            finishScreen = GAMEPLAY;
+            finish_screen = GAMEPLAY;
         }
     }
 }
 
-// Title Screen Draw logic
-void DrawTitleScreen(void) {
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), backgroundColor);
-    DrawTextEx(font, text, textPosition, fontSize, 1, WHITE);
-    DrawTexturePro(santaDead, santaFrame,
-                   (Rectangle){textPosition.x - 20, textPosition.y + 10,
-                               santaFrame.width, santaFrame.height},
+// title screen draw logic
+void draw_title_screen(void) {
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), background_color);
+    DrawTextEx(font, text, text_position, font_size, 1, WHITE);
+    DrawTexturePro(santa_dead, santa_frame,
+                   (Rectangle){text_position.x - 20, text_position.y + 10,
+                               santa_frame.width, santa_frame.height},
                    (Vector2){0.0f, 0.0f}, 0.0f, WHITE);
-    DrawTextEx(menuFont, startText, startTextPosition, supplementalFontSize, 1,
-               WHITE);
-    DrawTextEx(menuFont, instructionsText, instructionsTextPosition,
-               supplementalFontSize, 1, WHITE);
+    DrawTextEx(menu_font, start_text, start_text_position,
+               supplemental_font_size, 1, WHITE);
+    DrawTextEx(menu_font, instructions_text, instructions_text_position,
+               supplemental_font_size, 1, WHITE);
 }
 
-// Title Screen Unload logic
-void UnloadTitleScreen(void) {
+// title screen unload logic
+void unload_title_screen(void) {
     UnloadFont(font);
-    UnloadFont(menuFont);
-    UnloadTexture(santaDead);
+    UnloadFont(menu_font);
+    UnloadTexture(santa_dead);
 }
 
-// Title Screen should finish?
-GameScreen FinishTitleScreen(void) { return finishScreen; }
+// title screen should finish?
+GameScreen finish_title_screen(void) { return finish_screen; }
