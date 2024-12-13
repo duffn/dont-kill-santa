@@ -4,18 +4,18 @@
 #include <stdio.h>
 
 static int frames_counter = 0;
-static GameScreen finish_screen = -1;
+static GameScreen finish_screen = NONE;
 static float vs_alpha = 0.0f;
 static float vs_scale = 0.0f;
 
 static Vector2 mouse_position = {0.0f, 0.0f};
-static char *instructions_text = "instructions";
+static char *instructions_text = "Instructions";
 static Vector2 instructions_text_position = {0};
 static Vector2 instructions_text_size = {0};
 
 static const int supplemental_font_size = 36;
 
-static char *start_text = "start";
+static char *start_text = "Start";
 static Vector2 start_text_position = {0};
 static Vector2 start_text_size = {0};
 
@@ -23,14 +23,13 @@ static Font font = {0};
 static Font menu_font = {0};
 static Vector2 text_size = {0};
 static Vector2 text_position = {0};
-static const char *text = "don't kill santa";
+static const char *text = "Don't Kill Santa";
 static const int font_size = 96;
 static const Color background_color = (Color){47, 79, 146, 255};
 
 static Texture2D santa_dead = {0};
 static Rectangle santa_frame = {0};
 
-// title screen initialization logic
 void init_title_screen(void) {
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 
@@ -59,7 +58,7 @@ void init_title_screen(void) {
         (Vector2){(GetScreenWidth() - instructions_text_size.x) / 2.0f,
                   (GetScreenHeight() - instructions_text_size.y) / 2.0f + 200};
 
-    finish_screen = -1;
+    finish_screen = NONE;
 
     santa_frame =
         (Rectangle){.x = 0.0f,
@@ -73,7 +72,6 @@ void init_title_screen(void) {
     vs_scale = 10.0f;
 }
 
-// title screen update logic
 void update_title_screen(void) {
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 
@@ -101,7 +99,6 @@ void update_title_screen(void) {
     }
 }
 
-// title screen draw logic
 void draw_title_screen(void) {
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), background_color);
     DrawTextEx(font, text, text_position, font_size, 1, WHITE);
@@ -115,12 +112,10 @@ void draw_title_screen(void) {
                supplemental_font_size, 1, WHITE);
 }
 
-// title screen unload logic
 void unload_title_screen(void) {
     UnloadFont(font);
     UnloadFont(menu_font);
     UnloadTexture(santa_dead);
 }
 
-// title screen should finish?
 GameScreen finish_title_screen(void) { return finish_screen; }

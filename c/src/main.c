@@ -10,8 +10,8 @@ Music music = {0};
 static float trans_alpha = 0.0f;
 static bool on_transition = false;
 static bool trans_fade_out = false;
-static int trans_from_screen = -1;
-static int trans_to_screen = -1;
+static int trans_from_screen = NONE;
+static int trans_to_screen = NONE;
 
 static void change_to_screen(GameScreen screen);
 static void transition_to_screen(GameScreen screen);
@@ -76,18 +76,16 @@ static void transition_to_screen(GameScreen screen) {
     trans_alpha = 0.0f;
 }
 
-// update transition effect
 static void update_transition(void) {
     if (!trans_fade_out) {
         trans_alpha += 0.02f;
 
-        // note: due to float internal representation, condition jumps on 1.0f
+        // NOTE: due to float internal representation, condition jumps on 1.0f
         // instead of 1.05f for that reason we compare against 1.01f, to avoid
         // last frame loading stop
         if (trans_alpha > 1.01f) {
             trans_alpha = 1.0f;
 
-            // unload current screen
             switch (trans_from_screen) {
             case TITLE:
                 unload_title_screen();
@@ -102,7 +100,6 @@ static void update_transition(void) {
                 break;
             }
 
-            // load next screen
             switch (trans_to_screen) {
             case TITLE:
                 init_title_screen();
@@ -119,7 +116,6 @@ static void update_transition(void) {
 
             current_screen = trans_to_screen;
 
-            // activate fade out effect to next loaded screen
             trans_fade_out = true;
         }
     } else {
@@ -129,19 +125,18 @@ static void update_transition(void) {
             trans_alpha = 0.0f;
             trans_fade_out = false;
             on_transition = false;
-            trans_from_screen = -1;
-            trans_to_screen = -1;
+            trans_from_screen = NONE;
+            trans_to_screen = NONE;
         }
     }
 }
 
-// draw transition effect (full-screen rectangle)
 static void draw_transition(void) {
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(),
                   Fade(BLACK, trans_alpha));
 }
 
-// change to screen, no transition effect
+// Change to another screen without a transition effect.
 static void change_to_screen(GameScreen screen) {
     switch (current_screen) {
     case TITLE:
@@ -174,7 +169,6 @@ static void change_to_screen(GameScreen screen) {
     current_screen = screen;
 }
 
-// update and draw game frame
 static void update_draw_frame(void) {
     UpdateMusicStream(music);
 
@@ -228,7 +222,7 @@ static void update_draw_frame(void) {
         break;
     }
 
-    // draw full screen rectangle in front of everything
+    // Draw a full screen rectangle in front of everything
     if (on_transition)
         draw_transition();
 

@@ -3,7 +3,7 @@
 #include "screens.h"
 #include <stdio.h>
 
-static GameScreen finish_screen = -1;
+static GameScreen finish_screen = NONE;
 static Font font = {0};
 static Font instructions_font = {0};
 static Vector2 mouse_position = {0.0f, 0.0f};
@@ -14,10 +14,10 @@ static Texture2D santa_walk = {0};
 static Rectangle santa_frame = {0};
 
 static Vector2 text_position = {0};
-static const char *text = "instructions";
+static const char *text = "Instructions";
 static const int title_font_size = 72;
 
-static char *play_text = "play";
+static char *play_text = "Play";
 static Vector2 play_text_position = {0};
 static Vector2 play_text_size = {0};
 static const int supplemental_font_size = 48;
@@ -48,10 +48,9 @@ void init_instructions_screen(void) {
                     .height = (float)santa_walk.height};
     santa_frame.x = 4 * santa_frame.width;
 
-    finish_screen = -1;
+    finish_screen = NONE;
 }
 
-// instructions screen update logic
 void update_instructions_screen(void) {
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
     mouse_position = GetMousePosition();
@@ -60,14 +59,13 @@ void update_instructions_screen(void) {
                                                            play_text_position.y,
                                                            play_text_size.x,
                                                            play_text_size.y})) {
-        SetMouseCursor(MOUSE_CURSOR_DEFAULT);
+        SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             finish_screen = GAMEPLAY;
         }
     }
 }
 
-// instructions screen draw logic
 void draw_instructions_screen(void) {
     const int font_size = 24;
     const int start_position_y = 153;
@@ -80,20 +78,20 @@ void draw_instructions_screen(void) {
     DrawTextEx(font, text, text_position, title_font_size, 1, WHITE);
     // draw actual instructions
     DrawTextEx(instructions_font,
-               "hold down h or o or hold down on a touchscreen to make santa "
-               "run. ho, ho, ho!",
+               "Hold down H or O or hold down on a touchscreen to make santa "
+               "run. HO, HO, HO!",
                (Vector2){10, start_position_y}, font_size, 1, WHITE);
     DrawTextEx(instructions_font,
-               "release the key or remove your finger from the touchscreen to "
+               "Release the key or remove your finger from the touchscreen to "
                "stop him.",
                (Vector2){10, start_position_y + 40}, font_size, 1, WHITE);
     DrawTextEx(
         instructions_font,
-        "stop as close as possible to the candy cane, but don't touch it "
+        "Stop as close as possible to the candy cane, but don't touch it "
         "or you know what happens!",
         (Vector2){10, start_position_y + 80}, font_size, 1, WHITE);
     DrawTextEx(instructions_font,
-               "the closer you get to the candy cane, the better, so try for "
+               "The closer you get to the candy cane, the better, so try for "
                "your lowest score!",
                (Vector2){10, start_position_y + 120}, font_size, 1, WHITE);
     DrawTextEx(instructions_font, play_text, play_text_position,

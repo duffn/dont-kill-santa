@@ -3,7 +3,7 @@
 
 #include "raylib.h"
 
-typedef enum GameScreen { TITLE = 0, GAMEPLAY, INSTRUCTIONS } GameScreen;
+typedef enum GameScreen { NONE = -1, TITLE, GAMEPLAY, INSTRUCTIONS } GameScreen;
 
 extern GameScreen currentScreen;
 extern int score;
