@@ -114,7 +114,9 @@ void update_gameplay_screen(float dt) {
         scrolling_back = 0;
     }
 
-    if (!is_dead && !game_ended && (IsKeyDown(KEY_H) || IsKeyDown(KEY_O))) {
+    if (!is_dead && !game_ended &&
+        (IsKeyDown(KEY_H) || IsKeyDown(KEY_O) ||
+         IsGestureDetected(GESTURE_HOLD) || IsGestureDetected(GESTURE_DRAG))) {
         // Increase speed smoothly
         frames_speed += FRAME_ACCELERATION * dt;
         if (frames_speed > MAX_FRAME_SPEED)
