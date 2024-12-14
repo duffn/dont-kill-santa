@@ -42,10 +42,8 @@ void init_instructions_screen(void) {
                   (GetScreenHeight() - play_text_size.y) / 2.0f + 175};
 
     santa_frame =
-        (Rectangle){.x = 0.0f,
-                    .y = 0.0f,
-                    .width = (float)santa_walk.width / NUM_FRAMES_WALK,
-                    .height = (float)santa_walk.height};
+        (Rectangle){0.0f, 0.0f, (float)santa_walk.width / NUM_FRAMES_WALK,
+                    (float)santa_walk.height};
     santa_frame.x = 4 * santa_frame.width;
 
     finish_screen = NONE;

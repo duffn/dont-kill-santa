@@ -75,10 +75,8 @@ void init_gameplay_screen(void) {
     ground_y = GetScreenHeight() - ground.height;
 
     santa_frame =
-        (Rectangle){.x = 0.0f,
-                    .y = 0.0f,
-                    .width = (float)santa_walk.width / NUM_FRAMES_WALK,
-                    .height = (float)santa_walk.height};
+        (Rectangle){0.0f, 0.0f, (float)santa_walk.width / NUM_FRAMES_WALK,
+                    (float)santa_walk.height};
 
     current_santa = santa_walk;
 
@@ -182,10 +180,8 @@ void update_gameplay_screen(float dt) {
         is_animating_death = true;
         current_santa = santa_dead;
         santa_frame =
-            (Rectangle){.x = 0.0f,
-                        .y = 0.0f,
-                        .width = (float)santa_dead.width / NUM_FRAMES_DEAD,
-                        .height = (float)santa_dead.height};
+            (Rectangle){0.0f, 0.0f, (float)santa_dead.width / NUM_FRAMES_DEAD,
+                        (float)santa_dead.height};
 
         // Start death animation from the first frame
         current_frame = 0;

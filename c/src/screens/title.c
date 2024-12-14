@@ -61,10 +61,8 @@ void init_title_screen(void) {
     finish_screen = NONE;
 
     santa_frame =
-        (Rectangle){.x = 0.0f,
-                    .y = 0.0f,
-                    .width = (float)santa_dead.width / NUM_FRAMES_DEAD,
-                    .height = (float)santa_dead.height};
+        (Rectangle){0.0f, 0.0f, (float)santa_dead.width / NUM_FRAMES_DEAD,
+                    (float)santa_dead.height};
     santa_frame.x = 16 * santa_frame.width;
 
     frames_counter = 0;
