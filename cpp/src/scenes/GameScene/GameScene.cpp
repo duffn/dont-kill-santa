@@ -79,7 +79,9 @@ SceneChangeRequest GameScene::update(float dt) {
     }
 
     // Handle input for movement
-    if (!is_dead_ && !game_ended_ && (IsKeyDown(KEY_H) || IsKeyDown(KEY_O))) {
+    if (!is_dead_ && !game_ended_ &&
+        (IsKeyDown(KEY_H) || IsKeyDown(KEY_O) ||
+         IsGestureDetected(GESTURE_HOLD) || IsGestureDetected(GESTURE_DRAG))) {
         // Increase speed smoothly
         frames_speed_ += kAcceleration * dt;
         if (frames_speed_ > kMaxFrameSpeed)
