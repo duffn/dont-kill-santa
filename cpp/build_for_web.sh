@@ -22,4 +22,4 @@ else
 fi
 
 # Build the project using Emscripten
-cd build-web && emmake make
+cd build-web && emmake make && mv dontkillsanta.html index.html
