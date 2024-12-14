@@ -1,0 +1,61 @@
+name: cpp
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/cpp.yaml
+      - cpp/**
+
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - .github/workflows/cpp.yaml
+      - cpp/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 30
+
+    concurrency:
+      group: ${{ github.ref_name != 'main' && format('{0}-{1}', github.workflow, github.ref) || github.sha }}
+      cancel-in-progress: ${{ github.ref_name != 'main' }}
+
+    defaults:
+      run:
+        working-directory: cpp
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: cpp
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install gcc-multilib
+          sudo apt-get install -y --no-install-recommends libglfw3 libglfw3-dev libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libxext-dev libxfixes-dev libwayland-dev libwayland-bin libxkbcommon-dev
+
+      - name: Run CMake
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build project
+        run: cmake --build build
+
+      # This needs dependencies in the `build` directory,
+      # so goes here and not in a separate job.
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 3.1.74
+          actions-cache-folder: emsdk-cache
+
+      - name: Build project
+        run: ./build_for_web.sh async
