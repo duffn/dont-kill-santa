@@ -31,9 +31,10 @@ These are the ones I plan on doing at the moment, but it may change.
 
 - [x] C and [raylib](https://www.raylib.com/)
 - [x] C++ and [raylib](https://www.raylib.com/)
-- [ ] [love2d](https://www.love2d.org/)
-- [ ] [Pygame](https://www.pygame.org/docs/)
-- [ ] [Ebitengine](https://ebitengine.org/)
+- [x] [love2d](https://www.love2d.org/) - partial, see project README
+- [ ] [Godot](https://godotengine.org/)
+- [ ] ~[Pygame](https://www.pygame.org/docs/)~ - won't do, would be too similar to love2d
+- [ ] ~[Ebitengine](https://ebitengine.org/)~ - won't do, would be too similar to love2d
 
 ### Why did you choose these?
 
@@ -57,6 +58,9 @@ You can actually play the game here. I'll try to keep the itch.io page updated w
 - Christmas background music - [OpenGameArt - duanehoyt](https://opengameart.org/content/christmas-neo)
 - Christmas font - [1001 Free Fonts - KongFont](https://www.1001freefonts.com/hello-santa.font)
 - Menu font - [1001 Free Fonts - Typodermic Fonts](https://www.1001freefonts.com/coolvetica.font)
+- love2d template - [camchenry](https://github.com/camchenry/Love2D-Template)
+- love2d game state manager - [GwyrddGlas](https://github.com/GwyrddGlas/GameStateManager/)
+
 
 ## License
 
